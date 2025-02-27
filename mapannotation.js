@@ -140,7 +140,7 @@ function _renderMapAnnotationsImpl(imgElem, paneElem, records) {
     pinBoxElem.isAnnotation = true;
     paneElem.appendChild(pinBoxElem);
     pinBoxElem.style.left = Math.round((imgWidth * longRatio) - pinBoxElem.clientWidth * 0.5) + "px";
-    pinBoxElem.style.top = Math.round((imgHeight * latRatio) - pinBoxElem.clientHeight * 0.8) + "px";
+    pinBoxElem.style.top = Math.round((imgHeight * latRatio) - pinBoxElem.clientHeight * 0.9) + "px";
     pinBoxElem.style.zIndex = "2";
     let annotBoxElem = document.createElement("div");
     annotBoxElem.className = "mapannotannotbox";
@@ -381,11 +381,12 @@ function _renderImageGridImpl(paneElem, records, unitSize) {
             linkElem.style.top = Math.floor((unitSize - imgElem.clientHeight) / 2.5) + "px";
             linkElem.style.left = Math.floor((unitSize - imgElem.clientWidth) / 2) + "px";
           });
-        }
-        if (record.images.length == 3 && i == 1) {
+        } else if (i > 0) {
           imgElem.addEventListener("load", () => {
-            linkElem.style.top = Math.floor((unitSize - imgElem.clientHeight) / 2) + "px";
-            linkElem.style.left = Math.floor((unitSize - imgElem.clientWidth) / 2) + "px";
+            linkElem.style.top = Math.floor(
+              (unitSize - imgElem.clientHeight) / (record.images.length - 1) * i) + "px";
+            linkElem.style.left = Math.floor(
+              (unitSize - imgElem.clientWidth) / (record.images.length - 1) * i) + "px";
           });
         }
         if (record.images.length > 1 && i == record.images.length - 1) {
