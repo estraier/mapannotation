@@ -42,7 +42,7 @@ function renderMapAnnotations(imgElem, listElemId) {
   if (listText.match(/^\s*\[\s*\{[\s\S]+\}\s*\]\s*$/)) {
     records = JSON.parse(listText);
   } else {
-    records = parseAnnotationCSV(listText);
+    records = _parseAnnotationCSV(listText);
   }
   if (paneElem.style.position != "absolute" && paneElem.style.position != "fixed") {
     paneElem.style.position = "relative";
@@ -51,7 +51,7 @@ function renderMapAnnotations(imgElem, listElemId) {
   paneElem.style.border = "none";
   imgElem.style.zIndex = "0";
   imgElem.timeout = setTimeout(() => {
-    renderMapAnnotationsImpl(imgElem, paneElem, records);
+    _renderMapAnnotationsImpl(imgElem, paneElem, records);
   }, 100);
   window.addEventListener("resize", () => {
     clearTimeout(imgElem.timeout);
@@ -61,15 +61,15 @@ function renderMapAnnotations(imgElem, listElemId) {
   });
 }
 
-function latitudeToMercatorY(latitude) {
+function _latitudeToMercatorY(latitude) {
   return Math.log(Math.tan(Math.PI / 4 + (latitude * Math.PI / 180) / 2));
 }
 
-function longitudeToMercatorX(longitude) {
+function _longitudeToMercatorX(longitude) {
   return longitude / 180;
 }
 
-function renderMapAnnotationsImpl(imgElem, paneElem, records) {
+function _renderMapAnnotationsImpl(imgElem, paneElem, records) {
   let latlongFields = paneElem.dataset.latlong.split(",");
   if (latlongFields.length != 4) {
     console.error("bad latlong format");
@@ -89,10 +89,10 @@ function renderMapAnnotationsImpl(imgElem, paneElem, records) {
   if (paneElem.dataset && "allopen" in paneElem.dataset) {
     isAllOpen = ["allopen", "true", "1"].includes(paneElem.dataset.allopen);
   }
-  let startLat = latitudeToMercatorY(parseFloat(latlongFields[0]));
-  let startLong = longitudeToMercatorX(parseFloat(latlongFields[1]));
-  let endLat = latitudeToMercatorY(parseFloat(latlongFields[2]));
-  let endLong = longitudeToMercatorX(parseFloat(latlongFields[3]));
+  let startLat = _latitudeToMercatorY(parseFloat(latlongFields[0]));
+  let startLong = _longitudeToMercatorX(parseFloat(latlongFields[1]));
+  let endLat = _latitudeToMercatorY(parseFloat(latlongFields[2]));
+  let endLong = _longitudeToMercatorX(parseFloat(latlongFields[3]));
   let latDist = startLat - endLat;
   let longDist = endLong - startLong;
   let imgWidth = imgElem.clientWidth;
@@ -104,7 +104,7 @@ function renderMapAnnotationsImpl(imgElem, paneElem, records) {
     if (typeof record.yratio === "number") {
       latRatio = record.yratio;
     } else {
-      let recLat = latitudeToMercatorY(record.latitude);
+      let recLat = _latitudeToMercatorY(record.latitude);
       if (recLat > startLat) {
         console.warn("larger latitude: " + record.label);
         continue;
@@ -118,7 +118,7 @@ function renderMapAnnotationsImpl(imgElem, paneElem, records) {
     if (typeof record.xratio === "number") {
       longRatio = record.xratio;
     } else {
-      let recLong = longitudeToMercatorX(record.longitude);
+      let recLong = _longitudeToMercatorX(record.longitude);
       if (recLong < startLong) {
         console.warn("smaller longitude: " + record.label);
         continue;
@@ -202,11 +202,11 @@ function renderMapAnnotationsImpl(imgElem, paneElem, records) {
       });
       annotBoxElem.style.display = "none";
     }
-    renderAnnot(record, annotBoxElem);
+    _renderAnnot(record, annotBoxElem);
   }
 }
 
-function renderAnnot(record, annotBoxElem) {
+function _renderAnnot(record, annotBoxElem) {
   if (record.label && record.label.length > 0) {
     let labelElem = document.createElement("h2");
     labelElem.className = "mapannotannotlabel";
@@ -258,7 +258,7 @@ function renderAnnot(record, annotBoxElem) {
   }
 }
 
-function parseAnnotationCSV(text) {
+function _parseAnnotationCSV(text) {
   let records = [];
   for (let line of text.split("\n")) {
     line = line.trim();
@@ -331,17 +331,17 @@ function renderImageGrid(paneElemId, listElemId, unitSize) {
   if (listText.match(/^\s*\[\s*\{[\s\S]+\}\s*\]\s*$/)) {
     records = JSON.parse(listText);
   } else {
-    records = parseImageGridCSV(listText);
+    records = _parseImageGridCSV(listText);
   }
   if (paneElem.style.position != "absolute" && paneElem.style.position != "fixed") {
     paneElem.style.position = "relative";
   }
   paneElem.timeout = setTimeout(() => {
-    renderImageGridImpl(paneElem, records, unitSize);
+    _renderImageGridImpl(paneElem, records, unitSize);
   }, 100);
 }
 
-function renderImageGridImpl(paneElem, records, unitSize) {
+function _renderImageGridImpl(paneElem, records, unitSize) {
   for (let record of records) {
     let gridElem = document.createElement("span");
     gridElem.className = "imagegridunit";
@@ -369,7 +369,9 @@ function renderImageGridImpl(paneElem, records, unitSize) {
         linkElem.style.left = (i * shiftSize) + "px";
         linkElem.style.top = (i * shiftSize) + "px";
         linkElem.style.zIndex = record.images.length - i;
-        linkElem.href = imgSrc;
+        if (!_isTouchDevice()) {
+          linkElem.href = imgSrc;
+        }
         let imgElem = document.createElement("img");
         imgElem.src = imgSrc;
         imgElem.style.maxWidth = imgSize + "px";
@@ -462,7 +464,7 @@ function renderImageGridImpl(paneElem, records, unitSize) {
   }
 }
 
-function parseImageGridCSV(text) {
+function _parseImageGridCSV(text) {
   let records = [];
   for (let line of text.split("\n")) {
     line = line.trim();
@@ -491,4 +493,8 @@ function parseImageGridCSV(text) {
     records.push(record);
   }
   return records;
+}
+
+function _isTouchDevice() {
+  return Boolean('ontouchstart' in window || navigator.maxTouchPoints);
 }
