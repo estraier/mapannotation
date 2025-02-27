@@ -1,4 +1,5 @@
 .mapannotpinbox {
+  all: unset;
   position: absolute;
   width: 24px;
   height: 24px;
@@ -17,6 +18,7 @@
 }
 
 .mapannotannotbox {
+  all: unset;
   position: absolute;
   margin: 0px;
   padding: 5px;
@@ -70,8 +72,7 @@
 
 .mapannotannotbox div.mapannotannotlinkbox {
   margin: 0px;
-  padding: 0px;
-  text-align: center;
+  padding: 2px 2px;
 }
 
 .mapannotannotbox div.mapannotannotlinkbox .mapannotannotlink {
@@ -85,6 +86,7 @@
 }
 
 .imagegridunit {
+  all: unset;
   display: inline-block;
   position: relative;
   margin: 5px;
@@ -135,28 +137,7 @@
   position: absolute;
 }
 
-.imagegridcover {
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  padding: 0px;
-  z-index: 255;
-  background: #222;
-  opacity: 0.7;
-}
-
-.imagegridscreen {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 0px;
-  z-index: 256;
-}
-
-.imagegridcomment {
+.imagegridunit .imagegridcomment {
   position: absolute;
   bottom: 10px;
   right: 10px;
@@ -169,6 +150,29 @@
   opacity: 0.8;
 }
 
-.imagegridcomment:hover {
+.imagegridunit .imagegridcomment:hover {
   opacity: 1.0;
+}
+
+.imagegridcover {
+  all: unset;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  padding: 0px;
+  z-index: 255;
+  background: #222;
+  opacity: 0.7;
+}
+
+.imagegridscreen {
+  all: unset;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0px;
+  z-index: 256;
 }
