@@ -303,7 +303,7 @@ function _parseAnnotationCSV(text) {
       let expr = cols[5].replaceAll(/[,|]+/g, " ");
       for (let field of expr.split(" ")) {
         field = field.trim();
-        if (field.length > 0);
+        if (field.length < 1) continue;
         record.links.push(field);
       }
     }
