@@ -1,0 +1,29 @@
+================================================================================
+ a stand-alone JavaScript to put pins and annotations on any map images
+================================================================================
+
+With this, you can put pins and annotations on any map image by specifying the
+latitude and longitude for each pin. 
+
+Annotation data is embedded in HTML as CSV, Markdown, or JSON data.
+
+<div id="locationdatamd" style="display:none">
+|45.5231|141.9360|Cape Soya|The northernmost cape of Japan.|img/souya.jpg
+|30.9956|130.6644|Cape Sata|The southernmost cape of Japan.|img/sata.jpg
+</div>
+
+Each record of annotation is composed of latitude, longitude, and contents to be
+shown.  You can use any map image of Mercator projection.  By specifying the
+latitude and the longitude of the top-left corner and the bottom-right corner
+respectively, the cordination of each pin can be calculated accordingly.
+
+<div data-latlong="45.85,128.05,30.80,147.10" data-allopen="false">
+<img src="img/japanmap-core.png"
+  onload="renderMapAnnotations(this, 'locationdata');">
+</div>
+
+Please see the demonstration site for details.
+
+  https://dbmx.net/mapannotation/
+
+== END OF FILE ==
