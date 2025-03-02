@@ -415,6 +415,10 @@ function _renderImageGridImpl(paneElem, records, unitSize) {
       screenElem.className = "imagegridscreen";
       screenElem.style.width = screenSize + "px";
       screenElem.style.height = screenSize + "px";
+      coverElem.addEventListener("click", () => {
+        document.body.removeChild(screenElem);
+        document.body.removeChild(coverElem);
+      });
       let cloneElem = gridElem.cloneNode(true);
       cloneElem.style.margin = "0px";
       cloneElem.style.border = "none";
