@@ -51,12 +51,15 @@ function renderMapAnnotations(imgElem, listElemId) {
   paneElem.style.border = "none";
   imgElem.style.zIndex = "0";
   imgElem.timeout = setTimeout(() => {
+    imgElem.lastWidth = imgElem.width;
     _renderMapAnnotationsImpl(imgElem, paneElem, records);
   }, 100);
   window.addEventListener("resize", () => {
     clearTimeout(imgElem.timeout);
     imgElem.timeout = setTimeout(() => {
-      renderMapAnnotationsImpl(imgElem, paneElem, records);
+      if (imgElem.lastWidth == imgElem.width) return;
+      imgElem.lastWidth = imgElem.width;
+      _renderMapAnnotationsImpl(imgElem, paneElem, records);
     }, 100);
   });
 }
